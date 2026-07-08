@@ -1,0 +1,50 @@
+<div class="filters-container">
+  <div class="filter-group">
+    <label>Name</label>
+
+    <select [(ngModel)]="filters.nameOperator">
+      <option value="equals">Equals</option>
+      <option value="notEquals">Does Not Equal</option>
+    </select>
+
+    <input type="text" placeholder="Student Name" [(ngModel)]="filters.name" />
+  </div>
+
+  <div class="filter-group">
+    <label>Department</label>
+
+    <select [(ngModel)]="filters.departmentOperator">
+      <option value="equals">Equals</option>
+      <option value="notEquals">Does Not Equal</option>
+    </select>
+
+    <input type="text" placeholder="Department" [(ngModel)]="filters.department" />
+  </div>
+
+  <div class="filter-group">
+    <label>Enrolment Date</label>
+
+    <select [(ngModel)]="filters.enrolmentOperator">
+      <option value="before">Before</option>
+      <option value="after">After</option>
+    </select>
+
+    <input type="date" [(ngModel)]="filters.enrolmentDate" />
+  </div>
+
+  <div class="button-group">
+    <button (click)="applyFilters()">Apply Filters</button>
+
+    <button (click)="clearFilters()">Clear</button>
+  </div>
+
+  <div class="filter-group">
+    <label>Auto Refresh</label>
+
+    <select [(ngModel)]="refreshInterval" (change)="onRefreshIntervalChange()">
+      <option [ngValue]="5000">5 sec</option>
+      <option [ngValue]="10000">10 sec</option>
+      <option [ngValue]="30000">30 sec</option>
+    </select>
+  </div>
+</div>

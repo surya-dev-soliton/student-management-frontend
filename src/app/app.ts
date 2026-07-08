@@ -1,12 +1,16 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, signal, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { StudentsTableComponent } from './components/students-table/students-table.component';
+import { NimbleThemeProviderModule } from '@ni/nimble-angular';
+import { StudentsFilterComponent } from './components/students-filter/students-filter.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  standalone: true,
+  imports: [StudentsTableComponent, NimbleThemeProviderModule, StudentsFilterComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrl: './app.css',
 })
 export class App {
-  protected readonly title = signal('student-management-frontend');
+  protected readonly title = signal('frontend');
 }
