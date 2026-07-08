@@ -48,6 +48,8 @@ export class StudentsFilterComponent {
     this.filters.departmentOperator = 'equals';
     this.filters.enrolmentOperator = 'after';
 
-    console.log(this.filters);
+    this.studentsTableMaintainerService.applyFilters({
+      ...this.filters,
+    });
   }
 }
