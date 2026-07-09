@@ -3,11 +3,21 @@ import { ChangeDetectionStrategy, Component, CUSTOM_ELEMENTS_SCHEMA, inject } fr
 import { StudentTableMaintainerService } from '../../services/students-table-maintainer-service/students-table-maintainer.service';
 import { NimbleTableModule } from '@ni/nimble-angular/table';
 import { NimbleTableColumnTextModule } from '@ni/nimble-angular/table-column/text';
+import { NimbleTableColumnMenuButtonModule } from '@ni/nimble-angular/table-column/menu-button';
+import { NimbleMenuModule, NimbleMenuItemModule } from '@ni/nimble-angular';
 
 @Component({
   selector: 'app-students-table',
   standalone: true,
-  imports: [CommonModule, NimbleTableModule, NimbleTableColumnTextModule],
+  imports: [
+    CommonModule,
+    NimbleTableModule,
+    NimbleTableColumnTextModule,
+    NimbleTableColumnMenuButtonModule,
+    NimbleMenuModule,
+    NimbleMenuItemModule,
+    NimbleTableColumnMenuButtonModule,
+  ],
   templateUrl: './students-table.component.html',
   styleUrls: ['./students-table.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

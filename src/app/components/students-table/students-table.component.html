@@ -10,25 +10,4 @@
   <nimble-table-column-text field-name="status"> Status </nimble-table-column-text>
 
   <nimble-table-column-text field-name="interests"> Interests </nimble-table-column-text>
-
-  <nimble-table-column column-id="actions">
-    <ng-template let-row>
-      <div class="action-cell">
-        <button
-          class="kebab-button"
-          type="button"
-          (click)="toggleMenu(row.id)"
-          aria-label="Open student actions"
-        >
-          ⋮
-        </button>
-
-        <div class="menu" *ngIf="activeMenuStudentId === row.id">
-          <button type="button" (click)="deleteStudent(row.id)">Delete</button>
-        </div>
-      </div>
-    </ng-template>
-  </nimble-table-column>
 </nimble-table>
-
-<!-- <pre>{{ studentDetails$ | async | json }}</pre> -->
