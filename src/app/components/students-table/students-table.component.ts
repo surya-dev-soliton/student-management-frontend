@@ -1,11 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, CUSTOM_ELEMENTS_SCHEMA, inject } from '@angular/core';
 import { StudentTableMaintainerService } from '../../services/students-table-maintainer-service/students-table-maintainer.service';
+import { NimbleTableModule } from '@ni/nimble-angular/table';
+import { NimbleTableColumnTextModule } from '@ni/nimble-angular/table-column/text';
 
 @Component({
   selector: 'app-students-table',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, NimbleTableModule, NimbleTableColumnTextModule],
   templateUrl: './students-table.component.html',
   styleUrls: ['./students-table.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
