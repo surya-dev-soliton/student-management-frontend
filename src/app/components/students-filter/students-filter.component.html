@@ -1,47 +1,77 @@
 <div class="filters-container">
   <div class="filter-group">
-    <label>Name</label>
+    <label for="nameOperator">Name</label>
 
-    <select [(ngModel)]="filters.nameOperator">
+    <select id="nameOperator" aria-label="Name Operator" [(ngModel)]="filters.nameOperator">
       <option value="equals">Equals</option>
       <option value="notEquals">Does Not Equal</option>
     </select>
 
-    <input type="text" placeholder="Student Name" [(ngModel)]="filters.name" />
+    <input
+      id="studentName"
+      type="text"
+      aria-label="Student Name"
+      placeholder="Student Name"
+      [(ngModel)]="filters.name"
+    />
   </div>
 
   <div class="filter-group">
-    <label>Department</label>
+    <label for="departmentOperator">Department</label>
 
-    <select [(ngModel)]="filters.departmentOperator">
+    <select
+      id="departmentOperator"
+      aria-label="Department Operator"
+      [(ngModel)]="filters.departmentOperator"
+    >
       <option value="equals">Equals</option>
       <option value="notEquals">Does Not Equal</option>
     </select>
 
-    <input type="text" placeholder="Department" [(ngModel)]="filters.department" />
+    <input
+      id="department"
+      type="text"
+      aria-label="Department"
+      placeholder="Department"
+      [(ngModel)]="filters.department"
+    />
   </div>
 
   <div class="filter-group">
-    <label>Enrolment Date</label>
+    <label for="enrolmentOperator">Enrolment Date</label>
 
-    <select [(ngModel)]="filters.enrolmentOperator">
+    <select
+      id="enrolmentOperator"
+      aria-label="Enrolment Date Operator"
+      [(ngModel)]="filters.enrolmentOperator"
+    >
       <option value="before">Before</option>
       <option value="after">After</option>
     </select>
 
-    <input type="date" [(ngModel)]="filters.enrolmentDate" />
+    <input
+      id="enrolmentDate"
+      type="date"
+      aria-label="Enrolment Date"
+      [(ngModel)]="filters.enrolmentDate"
+    />
   </div>
 
   <div class="button-group">
-    <button (click)="applyFilters()">Apply Filters</button>
+    <button aria-label="Apply Filters" (click)="applyFilters()">Apply Filters</button>
 
-    <button (click)="clearFilters()">Clear</button>
+    <button aria-label="Clear Filters" (click)="clearFilters()">Clear</button>
   </div>
 
   <div class="filter-group">
-    <label>Auto Refresh</label>
+    <label for="autoRefresh">Auto Refresh</label>
 
-    <select [(ngModel)]="refreshInterval" (change)="onRefreshIntervalChange()">
+    <select
+      id="autoRefresh"
+      aria-label="Auto Refresh"
+      [(ngModel)]="refreshInterval"
+      (change)="onRefreshIntervalChange()"
+    >
       <option [ngValue]="5000">5 sec</option>
       <option [ngValue]="10000">10 sec</option>
       <option [ngValue]="30000">30 sec</option>
