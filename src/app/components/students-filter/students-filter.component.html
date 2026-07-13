@@ -1,80 +1,91 @@
 <div class="filters-container">
+  <!-- Name -->
   <div class="filter-group">
     <label for="nameOperator">Name</label>
 
-    <select id="nameOperator" aria-label="Name Operator" [(ngModel)]="filters.nameOperator">
-      <option value="equals">Equals</option>
-      <option value="notEquals">Does Not Equal</option>
-    </select>
+    <nimble-select
+      #nameOperator
+      id="nameOperator"
+      [value]="filters.nameOperator"
+      (change)="filters.nameOperator = $any(nameOperator).value"
+    >
+      <nimble-list-option value="equals">Equals</nimble-list-option>
+      <nimble-list-option value="notEquals">Does Not Equal</nimble-list-option>
+    </nimble-select>
 
-    <input
+    <nimble-text-field
+      #studentName
       id="studentName"
-      type="text"
-      aria-label="Student Name"
       placeholder="Student Name"
-      [(ngModel)]="filters.name"
-    />
+      [value]="filters.name"
+      (change)="filters.name = $any(studentName).value"
+    >
+    </nimble-text-field>
   </div>
 
+  <!-- Department -->
   <div class="filter-group">
     <label for="departmentOperator">Department</label>
 
-    <select
+    <nimble-select
+      #departmentOperator
       id="departmentOperator"
-      aria-label="Department Operator"
-      [(ngModel)]="filters.departmentOperator"
+      [value]="filters.departmentOperator"
+      (change)="filters.departmentOperator = $any(departmentOperator).value"
     >
-      <option value="equals">Equals</option>
-      <option value="notEquals">Does Not Equal</option>
-    </select>
+      <nimble-list-option value="equals">Equals</nimble-list-option>
+      <nimble-list-option value="notEquals">Does Not Equal</nimble-list-option>
+    </nimble-select>
 
-    <input
+    <nimble-text-field
+      #department
       id="department"
-      type="text"
-      aria-label="Department"
       placeholder="Department"
-      [(ngModel)]="filters.department"
-    />
+      [value]="filters.department"
+      (change)="filters.department = $any(department).value"
+    >
+    </nimble-text-field>
   </div>
 
+  <!-- Enrolment Date -->
   <div class="filter-group">
-    <label for="enrolmentOperator">Enrolment Date</label>
-
-    <select
+    <label for="enrolmentDate">Enrolment Date</label>
+    <nimble-select
+      #enrolmentOperator
       id="enrolmentOperator"
-      aria-label="Enrolment Date Operator"
-      [(ngModel)]="filters.enrolmentOperator"
+      [value]="filters.enrolmentOperator"
+      (change)="filters.enrolmentOperator = $any(enrolmentOperator).value"
     >
-      <option value="before">Before</option>
-      <option value="after">After</option>
-    </select>
-
+      <nimble-list-option value="before">Before</nimble-list-option>
+      <nimble-list-option value="after">After</nimble-list-option>
+    </nimble-select>
     <input
       id="enrolmentDate"
       type="date"
-      aria-label="Enrolment Date"
-      [(ngModel)]="filters.enrolmentDate"
+      [value]="filters.enrolmentDate"
+      (input)="filters.enrolmentDate = $any($event.target).value"
     />
   </div>
 
+  <!-- Buttons -->
   <div class="button-group">
-    <button aria-label="Apply Filters" (click)="applyFilters()">Apply Filters</button>
+    <nimble-button appearance="outline" (click)="applyFilters()"> Apply Filters </nimble-button>
 
-    <button aria-label="Clear Filters" (click)="clearFilters()">Clear</button>
+    <nimble-button appearance="outline" (click)="clearFilters()"> Clear </nimble-button>
   </div>
 
+  <!-- Auto Refresh -->
   <div class="filter-group">
     <label for="autoRefresh">Auto Refresh</label>
 
-    <select
-      id="autoRefresh"
-      aria-label="Auto Refresh"
-      [(ngModel)]="refreshInterval"
-      (change)="onRefreshIntervalChange()"
+    <nimble-select
+      #autoRefresh
+      [value]="refreshInterval"
+      (change)="refreshInterval = $any(autoRefresh).value; onRefreshIntervalChange()"
     >
-      <option [ngValue]="5000">5 sec</option>
-      <option [ngValue]="10000">10 sec</option>
-      <option [ngValue]="30000">30 sec</option>
-    </select>
+      <nimble-list-option value="5000">5 sec</nimble-list-option>
+      <nimble-list-option value="10000">10 sec</nimble-list-option>
+      <nimble-list-option value="30000">30 sec</nimble-list-option>
+    </nimble-select>
   </div>
 </div>

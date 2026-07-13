@@ -1,10 +1,10 @@
 export interface StudentFilters {
   name?: string;
-  nameOperator?: 'equals' | 'notEquals';
+  nameOperator?: string;
 
   department?: string;
-  departmentOperator?: 'equals' | 'notEquals';
+  departmentOperator?: string;
 
   enrolmentDate?: string;
-  enrolmentOperator?: 'before' | 'after';
+  enrolmentOperator?: string;
 }

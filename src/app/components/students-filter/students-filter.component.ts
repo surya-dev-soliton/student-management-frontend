@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 
 import { StudentFilters } from '../../models/student-filter.model';
 import { StudentTableMaintainerService } from '../../services/students-table-maintainer-service/students-table-maintainer.service';
+import { NimbleSelectModule, NimbleTextFieldModule } from '@ni/nimble-angular';
 
 @Component({
   selector: 'app-students-filter',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, NimbleTextFieldModule, NimbleSelectModule],
   templateUrl: './students-filter.component.html',
   styleUrls: ['./students-filter.component.scss'],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -27,10 +28,10 @@ export class StudentsFilterComponent {
     enrolmentOperator: 'after',
   };
 
-  refreshInterval = 5000;
+  refreshInterval = '5000';
 
   onRefreshIntervalChange(): void {
-    this.studentsTableMaintainerService.updateRefreshInterval(this.refreshInterval);
+    this.studentsTableMaintainerService.updateRefreshInterval(Number(this.refreshInterval));
   }
 
   applyFilters(): void {
