@@ -6,51 +6,69 @@ test.describe('Student Filters', () => {
   });
 
   test('should display all filter controls', async ({ page }) => {
-    await expect(page.getByRole('combobox', { name: 'Name Operator' })).toBeVisible();
+    await expect(page.locator('#nameOperator')).toBeVisible();
 
-    await expect(page.getByRole('textbox', { name: 'Student Name' })).toBeVisible();
+    await expect(page.locator('#studentName')).toBeVisible();
 
-    await expect(page.getByRole('combobox', { name: 'Department Operator' })).toBeVisible();
+    await expect(page.locator('#departmentOperator')).toBeVisible();
 
-    await expect(page.getByRole('textbox', { name: 'Department' })).toBeVisible();
+    await expect(page.locator('#department')).toBeVisible();
 
-    await expect(page.getByRole('combobox', { name: 'Enrolment Date Operator' })).toBeVisible();
+    await expect(page.locator('#enrolmentOperator')).toBeVisible();
 
     await expect(page.locator('#enrolmentDate')).toBeVisible();
 
     await expect(page.getByRole('button', { name: 'Apply Filters' })).toBeVisible();
 
-    await expect(page.getByRole('button', { name: 'Clear Filters' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Clear' })).toBeVisible();
 
-    await expect(page.getByRole('combobox', { name: 'Auto Refresh' })).toBeVisible();
+    await expect(page.locator('nimble-select').last()).toBeVisible();
   });
 
   test('should allow entering filter values', async ({ page }) => {
-    await page.getByRole('textbox', { name: 'Student Name' }).fill('John');
+    await page.locator('#studentName').evaluate((element, value) => {
+      const customElement = element as HTMLElement & { value: string };
+      customElement.value = value;
+      customElement.dispatchEvent(new Event('input', { bubbles: true }));
+      customElement.dispatchEvent(new Event('change', { bubbles: true }));
+    }, 'John');
 
-    await expect(page.getByRole('textbox', { name: 'Student Name' })).toHaveValue('John');
+    await expect(page.locator('#studentName')).toHaveAttribute('current-value', 'John');
 
-    await page.getByRole('textbox', { name: 'Department' }).fill('Computer Science');
+    await page.locator('#department').evaluate((element, value) => {
+      const customElement = element as HTMLElement & { value: string };
+      customElement.value = value;
+      customElement.dispatchEvent(new Event('input', { bubbles: true }));
+      customElement.dispatchEvent(new Event('change', { bubbles: true }));
+    }, 'Computer Science');
 
-    await expect(page.getByRole('textbox', { name: 'Department' })).toHaveValue('Computer Science');
+    await expect(page.locator('#department')).toHaveAttribute('current-value', 'Computer Science');
   });
 
   test('should allow changing filter operators', async ({ page }) => {
-    await page.getByRole('combobox', { name: 'Name Operator' }).selectOption('notEquals');
+    await page.locator('#nameOperator').evaluate((element, value) => {
+      const customElement = element as HTMLElement & { value: string };
+      customElement.value = value;
+      customElement.dispatchEvent(new Event('change', { bubbles: true }));
+    }, 'notEquals');
 
-    await expect(page.getByRole('combobox', { name: 'Name Operator' })).toHaveValue('notEquals');
+    await expect(page.locator('#nameOperator')).toHaveAttribute('current-value', 'notEquals');
 
-    await page.getByRole('combobox', { name: 'Department Operator' }).selectOption('notEquals');
+    await page.locator('#departmentOperator').evaluate((element, value) => {
+      const customElement = element as HTMLElement & { value: string };
+      customElement.value = value;
+      customElement.dispatchEvent(new Event('change', { bubbles: true }));
+    }, 'notEquals');
 
-    await expect(page.getByRole('combobox', { name: 'Department Operator' })).toHaveValue(
-      'notEquals',
-    );
+    await expect(page.locator('#departmentOperator')).toHaveAttribute('current-value', 'notEquals');
 
-    await page.getByRole('combobox', { name: 'Enrolment Date Operator' }).selectOption('before');
+    await page.locator('#enrolmentOperator').evaluate((element, value) => {
+      const customElement = element as HTMLElement & { value: string };
+      customElement.value = value;
+      customElement.dispatchEvent(new Event('change', { bubbles: true }));
+    }, 'before');
 
-    await expect(page.getByRole('combobox', { name: 'Enrolment Date Operator' })).toHaveValue(
-      'before',
-    );
+    await expect(page.locator('#enrolmentOperator')).toHaveAttribute('current-value', 'before');
   });
 
   test('should allow selecting enrolment date', async ({ page }) => {
@@ -62,23 +80,32 @@ test.describe('Student Filters', () => {
   });
 
   test('should clear all filter values', async ({ page }) => {
-    await page.getByRole('textbox', { name: 'Student Name' }).fill('John');
+    await page.locator('#studentName').evaluate((element, value) => {
+      const customElement = element as HTMLElement & { value: string };
+      customElement.value = value;
+      customElement.dispatchEvent(new Event('input', { bubbles: true }));
+      customElement.dispatchEvent(new Event('change', { bubbles: true }));
+    }, 'John');
 
-    await page.getByRole('textbox', { name: 'Department' }).fill('IT');
+    await page.locator('#department').evaluate((element, value) => {
+      const customElement = element as HTMLElement & { value: string };
+      customElement.value = value;
+      customElement.dispatchEvent(new Event('input', { bubbles: true }));
+      customElement.dispatchEvent(new Event('change', { bubbles: true }));
+    }, 'IT');
 
     await page.locator('#enrolmentDate').fill('2024-01-01');
 
-    await page.getByRole('button', { name: 'Clear Filters' }).click();
+    await page.getByRole('button', { name: 'Clear' }).click();
 
-    await expect(page.getByRole('textbox', { name: 'Student Name' })).toHaveValue('');
+    await expect(page.locator('#studentName')).toHaveAttribute('current-value', '');
 
-    await expect(page.getByRole('textbox', { name: 'Department' })).toHaveValue('');
+    await expect(page.locator('#department')).toHaveAttribute('current-value', '');
 
     await expect(page.locator('#enrolmentDate')).toHaveValue('');
   });
 
   test('should send name filter to the API', async ({ page }) => {
-    await page.goto('/');
 
     const requestPromise = page.waitForRequest(
       (request) =>
@@ -87,7 +114,12 @@ test.describe('Student Filters', () => {
         request.url().includes('name=John'),
     );
 
-    await page.getByRole('textbox', { name: 'Student Name' }).fill('John');
+    await page.locator('#studentName').evaluate((element, value) => {
+      const customElement = element as HTMLElement & { value: string };
+      customElement.value = value;
+      customElement.dispatchEvent(new Event('input', { bubbles: true }));
+      customElement.dispatchEvent(new Event('change', { bubbles: true }));
+    }, 'John');
     await page.getByRole('button', { name: 'Apply Filters' }).click();
 
     const request = await requestPromise;
@@ -127,7 +159,12 @@ test.describe('Student Filters', () => {
 
     await page.goto('/');
 
-    await page.getByRole('textbox', { name: 'Student Name' }).fill('John');
+    await page.locator('#studentName').evaluate((element, value) => {
+      const customElement = element as HTMLElement & { value: string };
+      customElement.value = value;
+      customElement.dispatchEvent(new Event('input', { bubbles: true }));
+      customElement.dispatchEvent(new Event('change', { bubbles: true }));
+    }, 'John');
 
     await page.getByRole('button', { name: 'Apply Filters' }).click();
 

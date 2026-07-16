@@ -6,6 +6,7 @@
     <nimble-select
       #nameOperator
       id="nameOperator"
+      aria-label="Name operator"
       [value]="filters.nameOperator"
       (change)="filters.nameOperator = $any(nameOperator).value"
     >
@@ -16,6 +17,7 @@
     <nimble-text-field
       #studentName
       id="studentName"
+      aria-label="Student Name"
       placeholder="Student Name"
       [value]="filters.name"
       (change)="filters.name = $any(studentName).value"
@@ -30,6 +32,7 @@
     <nimble-select
       #departmentOperator
       id="departmentOperator"
+      aria-label="Department operator"
       [value]="filters.departmentOperator"
       (change)="filters.departmentOperator = $any(departmentOperator).value"
     >
@@ -40,6 +43,7 @@
     <nimble-text-field
       #department
       id="department"
+      aria-label="Department"
       placeholder="Department"
       [value]="filters.department"
       (change)="filters.department = $any(department).value"
@@ -53,6 +57,7 @@
     <nimble-select
       #enrolmentOperator
       id="enrolmentOperator"
+      aria-label="Enrolment operator"
       [value]="filters.enrolmentOperator"
       (change)="filters.enrolmentOperator = $any(enrolmentOperator).value"
     >
