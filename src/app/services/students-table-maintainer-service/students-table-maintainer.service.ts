@@ -42,16 +42,14 @@ export class StudentTableMaintainerService {
           ...student,
           interests: (studentInterest?.interests ?? []).join(', '),
           status: this.calculateStatus(student.enrolmentDate),
+          actionsLabel: '⋮',
         };
       }),
     ),
   );
 
   deleteStudent(studentId: string): Observable<void> {
-    return forkJoin({
-      student: this.studentsHttpClient.deleteStudent(studentId),
-      interest: this.studentsInteresetHttpClient.deleteStudentInterests(studentId),
-    }).pipe(map(() => void 0));
+    return this.studentsHttpClient.deleteStudent(studentId);
   }
 
   private calculateStatus(enrolmentDate: string): StudentStatus {

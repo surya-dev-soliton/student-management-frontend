@@ -13,8 +13,4 @@ export class StudentsInterestHttpClient {
   getStudentInterests(): Observable<StudentInterest[]> {
     return this.http.get<StudentInterest[]>(`${BASE_URL}/interests`);
   }
-
-  deleteStudentInterests(studentId: string): Observable<void> {
-    return this.http.delete<void>(`${BASE_URL}/interests/${studentId}`);
-  }
 }

@@ -1,13 +1,31 @@
 <nimble-table [data$]="studentDetails$" data-testid="students-table" id-field-name="id">
-  <nimble-table-column-text field-name="id"> ID </nimble-table-column-text>
+  <nimble-table-column-text field-name="id" column-id="id-column"> ID </nimble-table-column-text>
+  <nimble-table-column-text field-name="name" column-id="name-column">
+    Name
+  </nimble-table-column-text>
+  <nimble-table-column-text field-name="department" column-id="department-column">
+    Department
+  </nimble-table-column-text>
+  <nimble-table-column-text field-name="enrolmentDate" column-id="enrolment-date-column">
+    Enrolment Date
+  </nimble-table-column-text>
+  <nimble-table-column-text field-name="status" column-id="status-column">
+    Status
+  </nimble-table-column-text>
+  <nimble-table-column-text field-name="interests" column-id="interests-column">
+    Interests
+  </nimble-table-column-text>
 
-  <nimble-table-column-text field-name="name"> Name </nimble-table-column-text>
+  <nimble-table-column-menu-button
+    field-name="actionsLabel"
+    column-id="actions-column"
+    menu-slot="actions-menu"
+    (menu-button-column-beforetoggle)="onMenuBeforeToggle($any($event))"
+  >
+    Actions
+  </nimble-table-column-menu-button>
 
-  <nimble-table-column-text field-name="department"> Department </nimble-table-column-text>
-
-  <nimble-table-column-text field-name="enrolmentDate"> Enrolment Date </nimble-table-column-text>
-
-  <nimble-table-column-text field-name="status"> Status </nimble-table-column-text>
-
-  <nimble-table-column-text field-name="interests"> Interests </nimble-table-column-text>
+  <nimble-menu slot="actions-menu">
+    <nimble-menu-item (click)="deleteStudent(activeMenuStudentId!)"> Delete </nimble-menu-item>
+  </nimble-menu>
 </nimble-table>

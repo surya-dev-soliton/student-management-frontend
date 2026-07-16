@@ -8,4 +8,5 @@ export interface StudentTable extends TableRecord {
   enrolmentDate: string;
   interests: string;
   status: StudentStatus;
+  actionsLabel: string;
 }

@@ -3,7 +3,10 @@ import { ChangeDetectionStrategy, Component, CUSTOM_ELEMENTS_SCHEMA, inject } fr
 import { StudentTableMaintainerService } from '../../services/students-table-maintainer-service/students-table-maintainer.service';
 import { NimbleTableModule } from '@ni/nimble-angular/table';
 import { NimbleTableColumnTextModule } from '@ni/nimble-angular/table-column/text';
-import { NimbleTableColumnMenuButtonModule } from '@ni/nimble-angular/table-column/menu-button';
+import {
+  MenuButtonColumnToggleEventDetail,
+  NimbleTableColumnMenuButtonModule,
+} from '@ni/nimble-angular/table-column/menu-button';
 import { NimbleMenuModule, NimbleMenuItemModule } from '@ni/nimble-angular';
 
 @Component({
@@ -28,6 +31,13 @@ export class StudentsTableComponent {
 
   readonly studentDetails$ = this.studentsTableMaintainerService.studentDetails$;
   activeMenuStudentId: string | null = null;
+
+  onMenuBeforeToggle(event: Event): void {
+    const detail = (event as CustomEvent<MenuButtonColumnToggleEventDetail>).detail;
+    if (detail.newState) {
+      this.activeMenuStudentId = detail.recordId;
+    }
+  }
 
   toggleMenu(studentId: string): void {
     this.activeMenuStudentId = this.activeMenuStudentId === studentId ? null : studentId;
