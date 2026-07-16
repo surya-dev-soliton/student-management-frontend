@@ -23,36 +23,44 @@ describe('StudentsHttpClient', () => {
   });
 
   it('should request the student list from the expected endpoint', () => {
-    let result: unknown;
 
+    // Arrange
+    let result: unknown;
+    const mockStudents = [
+      { id: 'student-1', name: 'Ada Lovelace', department: 'CS', enrolmentDate: '2020-01-01' }
+    ]
+    const endpoint = `${BASE_URL}/students`
+
+    // Act
     service.getStudents().subscribe((students) => {
       result = students;
     });
 
-    const request = httpTestingController.expectOne(`${BASE_URL}/students`);
+    const request = httpTestingController.expectOne(endpoint);
+    request.flush(mockStudents);
+    
+    // Assert
     expect(request.request.method).toBe('GET');
-
-    request.flush([
-      { id: 'student-1', name: 'Ada Lovelace', department: 'CS', enrolmentDate: '2020-01-01' },
-    ]);
-
-    expect(result).toEqual([
-      { id: 'student-1', name: 'Ada Lovelace', department: 'CS', enrolmentDate: '2020-01-01' },
-    ]);
+    expect(result).toEqual(mockStudents);
   });
 
   it('should delete a student from the expected endpoint', () => {
-    let deleted = false;
 
-    service.deleteStudent('student-1').subscribe(() => {
+    // Arrange
+    let deleted = false;
+    const studentId = "student-1"
+    const endpoint = `${BASE_URL}/students/${studentId}`
+
+    // Act
+    service.deleteStudent(studentId).subscribe(() => {
       deleted = true;
     });
 
-    const request = httpTestingController.expectOne(`${BASE_URL}/students/student-1`);
-    expect(request.request.method).toBe('DELETE');
-
+    const request = httpTestingController.expectOne(endpoint);
     request.flush(null);
-
+    
+    // Assert
+    expect(request.request.method).toBe('DELETE');
     expect(deleted).toBeTrue();
   });
 });

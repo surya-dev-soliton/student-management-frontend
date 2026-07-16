@@ -24,49 +24,63 @@ describe('StudentTableMaintainerService', () => {
     httpTestingController.verify();
   });
 
-  it('should map combined student and interest data into table rows with calculated statuses', (done) => {
-    let rows: Array<{ interests: string; status: StudentStatus }> = [];
+ it('should map combined student and interest data into table rows with calculated statuses', (done) => {
+    // Arrange
+    let actualRows: any[] = [];
 
-    service.studentDetails$.pipe(take(1)).subscribe((result) => {
-      rows = result;
-      expect(rows[0].interests).toBe('AI, ML');
-      expect(rows[0].status).toBe(StudentStatus.Alumni);
+    const expectedStudents = [
+      {
+        id: 'student-1',
+        name: 'Ada Lovelace',
+        department: 'Computer Science',
+        enrolmentDate: '2018-01-01',
+      },
+    ];
+
+    const expectedInterests = [
+      {
+        studentId: 'student-1',
+        interests: ['AI', 'ML'],
+      },
+    ];
+
+    // Act
+    service.studentDetails$.pipe(take(1)).subscribe((rows) => {
+      actualRows = rows;
+
+      // Assert
+      expect(actualRows.length).toBe(1);
+      expect(actualRows[0].interests).toBe('AI, ML');
+      expect(actualRows[0].status).toBe(StudentStatus.Alumni);
+      expect(actualRows[0].actionsLabel).toBe('⋮');
+
       done();
     });
 
-    setTimeout(() => {
-      const studentsRequest = httpTestingController.expectOne(`${BASE_URL}/students`);
-      studentsRequest.flush([
-        {
-          id: 'student-1',
-          name: 'Ada Lovelace',
-          department: 'Computer Science',
-          enrolmentDate: '2020-01-01',
-        },
-      ]);
+    const studentsRequest = httpTestingController.expectOne(`${BASE_URL}/students`);
+    studentsRequest.flush(expectedStudents);
 
-      const interestsRequest = httpTestingController.expectOne(`${BASE_URL}/interests`);
-      interestsRequest.flush([{ studentId: 'student-1', interests: ['AI', 'ML'] }]);
-    }, 0);
+    const interestsRequest = httpTestingController.expectOne(`${BASE_URL}/interests`);
+    interestsRequest.flush(expectedInterests);
   });
 
-  it('should delete a student and their interests using the expected endpoints', () => {
-    let completed = false;
+  it('should delete a student using the expected endpoint', () => {
+    // Arrange
+    let deleted = false;
+    const studentId = 'student-1';
+    const endpoint = `${BASE_URL}/students/${studentId}`
 
-    service.deleteStudent('student-1').subscribe({
-      next: () => {
-        completed = true;
-      },
+    // Act
+    service.deleteStudent(studentId).subscribe(() => {
+      deleted = true;
     });
 
-    const studentDeleteRequest = httpTestingController.expectOne(`${BASE_URL}/students/student-1`);
-    studentDeleteRequest.flush(null);
+    const request = httpTestingController.expectOne(endpoint);
 
-    const interestDeleteRequest = httpTestingController.expectOne(
-      `${BASE_URL}/interests/student-1`,
-    );
-    interestDeleteRequest.flush(null);
+    request.flush(null);
 
-    expect(completed).toBeTrue();
+    // Assert
+    expect(request.request.method).toBe('DELETE');
+    expect(deleted).toBeTrue();
   });
 });

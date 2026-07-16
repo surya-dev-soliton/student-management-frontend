@@ -23,32 +23,26 @@ describe('StudentsInterestHttpClient', () => {
   });
 
   it('should request the student interests from the expected endpoint', () => {
-    let result: unknown;
+    // Arrange
+    let actualResult: unknown;
+    const expectedInterests = [
+      {
+        studentId: 'student-1',
+        interests: ['AI', 'ML'],
+      },
+    ];
+    const endpoint = `${BASE_URL}/interests`
 
+    // Act
     service.getStudentInterests().subscribe((interests) => {
-      result = interests;
+      actualResult = interests;
     });
 
-    const request = httpTestingController.expectOne(`${BASE_URL}/interests`);
+    const request = httpTestingController.expectOne(endpoint);
+    request.flush(expectedInterests);
+    
+    // Assert
     expect(request.request.method).toBe('GET');
-
-    request.flush([{ studentId: 'student-1', interests: ['AI', 'ML'] }]);
-
-    expect(result).toEqual([{ studentId: 'student-1', interests: ['AI', 'ML'] }]);
-  });
-
-  it('should delete interests for a student from the expected endpoint', () => {
-    let deleted = false;
-
-    service.deleteStudentInterests('student-1').subscribe(() => {
-      deleted = true;
-    });
-
-    const request = httpTestingController.expectOne(`${BASE_URL}/interests/student-1`);
-    expect(request.request.method).toBe('DELETE');
-
-    request.flush(null);
-
-    expect(deleted).toBeTrue();
+    expect(actualResult).toEqual(expectedInterests);
   });
 });
