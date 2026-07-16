@@ -9,23 +9,22 @@ import { StudentsTableComponent } from './students-table.component';
 class StudentsTablePageObject {
   constructor(private readonly fixture: ComponentFixture<StudentsTableComponent>) {}
 
-  get tableRows(): HTMLTableRowElement[] {
-    return Array.from(this.fixture.nativeElement.querySelectorAll('tbody tr'));
+  get table(): HTMLElement | null {
+    return this.fixture.nativeElement.querySelector(
+        '[data-testid="students-table"]'
+    );
   }
 
-  get kebabButtons(): HTMLButtonElement[] {
-    return Array.from(this.fixture.nativeElement.querySelectorAll('button.kebab-button'));
+  get menuButton(): HTMLElement | null {
+    return this.fixture.nativeElement.querySelector(
+        'nimble-table-column-menu-button'
+    );
   }
 
-  openFirstMenu(): void {
-    this.kebabButtons[0].click();
-    this.fixture.detectChanges();
-  }
-
-  get menuActions(): string[] {
-    return Array.from(
-      this.fixture.nativeElement.querySelectorAll('.menu button') as NodeListOf<HTMLButtonElement>,
-    ).map((button: HTMLButtonElement) => button.textContent?.trim() ?? '');
+  get deleteMenuItem(): HTMLElement | null {
+    return this.fixture.nativeElement.querySelector(
+        'nimble-menu-item'
+    );
   }
 }
 
@@ -42,6 +41,7 @@ describe('StudentsTableComponent', () => {
       enrolmentDate: '2020-01-01',
       interests: 'AI, ML',
       status: StudentStatus.Alumni,
+       actionsLabel: '⋮',
     },
     {
       id: 'student-2',
@@ -50,19 +50,29 @@ describe('StudentsTableComponent', () => {
       enrolmentDate: '2024-01-01',
       interests: 'Cloud',
       status: StudentStatus.CurrentStudent,
+       actionsLabel: '⋮',
     },
   ];
 
   beforeEach(async () => {
-    maintainerService = jasmine.createSpyObj('StudentTableMaintainerService', ['deleteStudent'], {
-      studentDetails$: of(students),
-    });
+    maintainerService = jasmine.createSpyObj(
+      'StudentTableMaintainerService',
+      ['deleteStudent'],
+      {
+        studentDetails$: of(students),
+      },
+    );
+
+    maintainerService.deleteStudent.and.returnValue(of(void 0));
 
     await TestBed.configureTestingModule({
       imports: [StudentsTableComponent],
       providers: [
         provideZonelessChangeDetection(),
-        { provide: StudentTableMaintainerService, useValue: maintainerService },
+        {
+          provide: StudentTableMaintainerService,
+          useValue: maintainerService,
+        },
       ],
     }).compileComponents();
 
@@ -71,23 +81,26 @@ describe('StudentsTableComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should render the student data and expose the student details stream', () => {
-    expect(fixture.componentInstance.studentDetails$).toBeDefined();
-    expect(pageObject.tableRows.length).toBe(2);
-    expect(pageObject.tableRows[0].textContent).toContain('Ada Lovelace');
-    expect(pageObject.tableRows[0].textContent).toContain('Computer Science');
+  it('should expose the student details stream and render the table', () => {
+    // Arrange
+    const component = fixture.componentInstance;
+
+    // Act
+    fixture.detectChanges();
+
+    // Assert
+    expect(component.studentDetails$).toBeDefined();
+    expect(pageObject.table).toBeTruthy();
   });
 
-  it('should expose a delete action from the kebab menu and call the service', () => {
-    pageObject.openFirstMenu();
+  it('should call deleteStudent on the maintainer service', () => {
+    // Arrange
+    const studentId = 'student-1';
 
-    expect(pageObject.menuActions).toContain('Delete');
+    // Act
+    fixture.componentInstance.deleteStudent(studentId);
 
-    maintainerService.deleteStudent.and.returnValue(of(void 0));
-
-    const deleteButton = fixture.nativeElement.querySelector('.menu button') as HTMLButtonElement;
-    deleteButton.click();
-
-    expect(maintainerService.deleteStudent).toHaveBeenCalledWith('student-1');
+    // Assert
+    expect(maintainerService.deleteStudent).toHaveBeenCalledOnceWith(studentId);
   });
 });

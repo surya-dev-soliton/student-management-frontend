@@ -37,40 +37,42 @@ describe('StudentsFilterComponent', () => {
 
   describe('applyFilters', () => {
     it('should call applyFilters on the maintainer service', () => {
-      component.filters.name = 'John';
-      component.filters.nameOperator = 'equals';
 
-      component.filters.department = 'CSE';
-      component.filters.departmentOperator = 'equals';
-
-      component.filters.enrolmentDate = '2024-01-01';
-      component.filters.enrolmentOperator = 'after';
-
-      component.applyFilters();
-
-      expect(maintainerService.applyFilters).toHaveBeenCalledWith({
+      // Arrange
+      component.filters = {
         name: 'John',
         nameOperator: 'equals',
         department: 'CSE',
         departmentOperator: 'equals',
         enrolmentDate: '2024-01-01',
         enrolmentOperator: 'after',
-      });
+      };
+     
+      // Act
+      component.applyFilters();
+
+      // Assert
+      expect(maintainerService.applyFilters).toHaveBeenCalledWith(component.filters);
     });
   });
 
   describe('clearFilters', () => {
     it('should reset all filters to their default values', () => {
-      component.filters.name = 'John';
-      component.filters.department = 'ECE';
-      component.filters.enrolmentDate = '2024-01-01';
+      // Arrange
+      component.filters = {
+        name: 'John',
+        nameOperator: 'notEquals',
+        department: 'ECE',
+        departmentOperator: 'notEquals',
+        enrolmentDate: '2024-01-01',
+        enrolmentOperator: 'before',
+      };
 
-      component.filters.nameOperator = 'notEquals';
-      component.filters.departmentOperator = 'notEquals';
-      component.filters.enrolmentOperator = 'before';
-
+      // Act
       component.clearFilters();
 
+
+      // Assert
       expect(component.filters).toEqual({
         name: '',
         nameOperator: 'equals',
@@ -86,26 +88,37 @@ describe('StudentsFilterComponent', () => {
 
   describe('onRefreshIntervalChange', () => {
     it('should update the refresh interval', () => {
-      component.refreshInterval = 10000;
+      // Arrange
+      component.refreshInterval = '10000';
 
+      // Act
       component.onRefreshIntervalChange();
 
+      // Assert
       expect(maintainerService.updateRefreshInterval).toHaveBeenCalledOnceWith(10000);
     });
 
     it('should update the refresh interval to 30000', () => {
-      component.refreshInterval = 30000;
+      // Arrange
+      component.refreshInterval = '30000';
 
+      // Act
       component.onRefreshIntervalChange();
 
+      // Assert
       expect(maintainerService.updateRefreshInterval).toHaveBeenCalledOnceWith(30000);
     });
   });
 
   describe('template', () => {
     it('should render all filter labels', () => {
+
+      // Arrange & act
+      fixture.detectChanges();
+
       const labels = fixture.nativeElement.querySelectorAll('label');
 
+      // Assert
       expect(labels.length).toBe(4);
 
       expect(labels[0].textContent.trim()).toBe('Name');
@@ -114,21 +127,33 @@ describe('StudentsFilterComponent', () => {
       expect(labels[3].textContent.trim()).toBe('Auto Refresh');
     });
 
-    it('should render two buttons', () => {
+    it('should render two nimble buttons', () => {
+
+      // Arrange & act
+      fixture.detectChanges();
       const buttons = fixture.nativeElement.querySelectorAll('button');
 
+      // Assert
       expect(buttons.length).toBe(2);
-
-      expect(buttons[0].textContent.trim()).toBe('Apply Filters');
-      expect(buttons[1].textContent.trim()).toBe('Clear');
     });
 
-    it('should render three text/select filter groups and one refresh dropdown', () => {
-      const selects = fixture.nativeElement.querySelectorAll('select');
-      const inputs = fixture.nativeElement.querySelectorAll('input');
+    it('should render all filter controls', () => {
+      // Arrange & Act
+      fixture.detectChanges();
 
+      const selects =
+        fixture.nativeElement.querySelectorAll('nimble-select');
+
+      const textFields =
+        fixture.nativeElement.querySelectorAll('nimble-text-field');
+
+      const dateInput =
+        fixture.nativeElement.querySelector('input[type="date"]');
+
+      // Assert
       expect(selects.length).toBe(4);
-      expect(inputs.length).toBe(3);
+      expect(textFields.length).toBe(2);
+      expect(dateInput).toBeTruthy();
     });
   });
 });

@@ -17,7 +17,7 @@ import { NimbleSelectModule, NimbleTextFieldModule } from '@ni/nimble-angular';
 export class StudentsFilterComponent {
   private readonly studentsTableMaintainerService = inject(StudentTableMaintainerService);
 
-  readonly filters: StudentFilters = {
+  filters: StudentFilters = {
     name: '',
     nameOperator: 'equals',
 
