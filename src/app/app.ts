@@ -20,5 +20,4 @@ import { StudentsFilterComponent } from './components/students-filter/students-f
   styleUrl: './app.css',
 })
 export class App {
-  protected readonly title = signal('frontend');
 }
