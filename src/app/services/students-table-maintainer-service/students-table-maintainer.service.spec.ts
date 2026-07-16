@@ -24,7 +24,7 @@ describe('StudentTableMaintainerService', () => {
     httpTestingController.verify();
   });
 
-  it('should map combined student and interest data into table rows with calculated statuses', (done) => {
+  it('should map combined student and interest data into table rows with calculated statuses', async () => {
     // Arrange
     let actualRows: any[] = [];
 
@@ -49,6 +49,8 @@ describe('StudentTableMaintainerService', () => {
       actualRows = rows;
     });
 
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
     const studentsRequest = httpTestingController.expectOne(`${BASE_URL}/students`);
     studentsRequest.flush(expectedStudents);
 
@@ -60,8 +62,6 @@ describe('StudentTableMaintainerService', () => {
     expect(actualRows[0].interests).toBe('AI, ML');
     expect(actualRows[0].status).toBe(StudentStatus.Alumni);
     expect(actualRows[0].actionsLabel).toBe('⋮');
-
-    done();
   });
 
   it('should delete a student using the expected endpoint', () => {
