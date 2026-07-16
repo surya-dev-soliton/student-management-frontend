@@ -131,7 +131,8 @@ describe('StudentsFilterComponent', () => {
 
       // Arrange & act
       fixture.detectChanges();
-      const buttons = fixture.nativeElement.querySelectorAll('button');
+      const buttonGroup = fixture.nativeElement.querySelector('.button-group');
+      const buttons = buttonGroup.querySelectorAll('nimble-button');
 
       // Assert
       expect(buttons.length).toBe(2);

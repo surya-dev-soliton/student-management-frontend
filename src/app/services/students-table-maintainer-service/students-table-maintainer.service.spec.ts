@@ -24,7 +24,7 @@ describe('StudentTableMaintainerService', () => {
     httpTestingController.verify();
   });
 
- it('should map combined student and interest data into table rows with calculated statuses', (done) => {
+  it('should map combined student and interest data into table rows with calculated statuses', (done) => {
     // Arrange
     let actualRows: any[] = [];
 
@@ -47,14 +47,6 @@ describe('StudentTableMaintainerService', () => {
     // Act
     service.studentDetails$.pipe(take(1)).subscribe((rows) => {
       actualRows = rows;
-
-      // Assert
-      expect(actualRows.length).toBe(1);
-      expect(actualRows[0].interests).toBe('AI, ML');
-      expect(actualRows[0].status).toBe(StudentStatus.Alumni);
-      expect(actualRows[0].actionsLabel).toBe('⋮');
-
-      done();
     });
 
     const studentsRequest = httpTestingController.expectOne(`${BASE_URL}/students`);
@@ -62,6 +54,14 @@ describe('StudentTableMaintainerService', () => {
 
     const interestsRequest = httpTestingController.expectOne(`${BASE_URL}/interests`);
     interestsRequest.flush(expectedInterests);
+
+    // Assert
+    expect(actualRows.length).toBe(1);
+    expect(actualRows[0].interests).toBe('AI, ML');
+    expect(actualRows[0].status).toBe(StudentStatus.Alumni);
+    expect(actualRows[0].actionsLabel).toBe('⋮');
+
+    done();
   });
 
   it('should delete a student using the expected endpoint', () => {
