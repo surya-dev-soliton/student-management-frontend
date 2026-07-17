@@ -39,10 +39,6 @@ export class StudentsTableComponent {
     }
   }
 
-  toggleMenu(studentId: string): void {
-    this.activeMenuStudentId = this.activeMenuStudentId === studentId ? null : studentId;
-  }
-
   deleteStudent(studentId: string): void {
     this.activeMenuStudentId = null;
 
